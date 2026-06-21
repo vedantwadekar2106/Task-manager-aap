@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Task Manager</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!--
+    ============================================================
+    PROJECT: Professional Task Manager Application
+    DESCRIPTION: A fully-featured Task Manager demonstrating
+    core Vanilla JavaScript concepts including DOM Manipulation,
+    Event Handling, Event Delegation, Event Bubbling & Capturing,
+    Attributes vs Properties, Browser Rendering Pipeline, and
+    Local Storage integration.
+    TECH STACK: HTML, CSS, Vanilla JavaScript (No frameworks)
+    ============================================================
+    -->
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="app-header" id="appHeader">
+        <div class="header-inner">
+            <h1 class="app-title">
+                <span class="title-icon">📋</span> Task Manager
+            </h1>
+            <p class="app-subtitle">Professional Task Management Application</p>
+        </div>
+        <!-- Theme Toggle Button -->
+        <button
+        class="theme-toggle-btn"
+        id="themeToggleBtn"
+        aria-label="Toggle Dark/Light Mode"
+        title="Toggle Dark/Light Mode"
+        >
+        <span class="theme-icon" id="themeIcon">🌙</span>
+        <span class="theme-text" id="themeText">Dark Mode</span>
+    </button>
+</header>
+
+<!-- ==================== MAIN CONTAINER ==================== -->
+<main class="main-container">
+
+    <!-- ==================== FEATURE 1: TASK CREATION MODULE ==================== -->
+    <section class="card creation-section" id="creationSection">
+        <h2 class="section-title">✨ Create New Task</h2>
+        <form class="task-form" id="taskForm">
+            <div class="form-group">
+                <label for="taskTitleInput" class="form-label">Task Title</label>
+                <input
+                type="text"
+                id="taskTitleInput"
+                class="form-input"
+                placeholder="Enter your task title..."
+                required
+                autocomplete="off"
+                >
+            </div>
+            <div class="form-row">
+                <div class="form-group form-group-category">
+                    <label for="categorySelect" class="form-label">Category</label>
+                    <select id="categorySelect" class="form-select">
+                        <option value="study">📚 Study</option>
+                        <option value="work">💼 Work</option>
+                        <option value="personal">🏠 Personal</option>
+                    </select>
+                </div>
+                <div class="form-group form-group-priority">
+                    <label class="form-label checkbox-label">
+                        <input type="checkbox" id="addToTopCheckbox">
+                        Add to Top (prepend)
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-add" id="addTaskBtn">
+                <span class="btn-icon">➕</span> Add Task
+            </button>
+        </form>
+    </section>
+
+    <!-- ==================== SEARCH & FILTER BAR ==================== -->
+    <section class="card controls-section" id="controlsSection">
+        <div class="controls-row">
+            <!-- Search Input -->
+            <div class="control-group search-group">
+                <label for="searchInput" class="control-label">🔍 Search Tasks</label>
+                <input
+                type="text"
+                id="searchInput"
+                class="form-input search-input"
+                placeholder="Search by title..."
+                autocomplete="off"
+                >
+            </div>
+            <!-- Filter by Category -->
+            <div class="control-group filter-group">
+                <label for="filterSelect" class="control-label">📂 Filter by Category</label>
+                <select id="filterSelect" class="form-select">
+                    <option value="all">All Categories</option>
+                    <option value="study">📚 Study</option>
+                    <option value="work">💼 Work</option>
+                    <option value="personal">🏠 Personal</option>
+                </select>
+            </div>
+        </div>
+        <!-- Counters & Clear -->
+        <div class="stats-row">
+            <div class="stat-badge stat-pending" id="pendingCounter">
+                ⏳ Pending: <strong>0</strong>
+            </div>
+            <div class="stat-badge stat-completed" id="completedCounter">
+                ✅ Completed: <strong>0</strong>
+            </div>
+            <button class="btn btn-danger btn-clear" id="clearAllBtn">
+                🗑️ Clear All Tasks
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== TASK LIST SECTION ==================== -->
+    <section class="card tasks-section" id="tasksSection">
+        <h2 class="section-title">📝 Your Tasks</h2>
+        <!--
+        EVENT DELEGATION:
+        A SINGLE click listener is attached to this container (#taskContainer).
+        All button clicks on individual task cards are handled through
+        event bubbling up to this parent, where we use event.target
+        to determine which specific button was clicked.
+        This is more efficient than attaching listeners to every button.
+        -->
+        <div class="task-container" id="taskContainer">
+            <!-- Task cards are dynamically inserted here -->
+            <div class="empty-state" id="emptyState">
+                <span class="empty-icon">📭</span>
+                <p>No tasks yet. Create your first task above!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FEATURE 4: ATTRIBUTES VS PROPERTIES DEMONSTRATION ==================== -->
+    <section class="card demo-section" id="attrPropDemo">
+        <h2 class="section-title">🔬 Attributes vs Properties Demonstration</h2>
+        <p class="demo-description">
+            The <strong>value property</strong> gives the current live value of the input.
+            <strong>getAttribute("value")</strong> returns the original HTML attribute value (the default).
+            Type in the input below and click the button to see the difference in the console.
+        </p>
+        <div class="demo-row">
+            <input
+            type="text"
+            id="demoInput"
+            class="form-input demo-input"
+            value="Original HTML Value"
+            placeholder="Type something..."
+            >
+            <button class="btn btn-secondary" id="showDiffBtn">
+                🖨️ Show Difference (Check Console)
+            </button>
+            <button class="btn btn-outline" id="resetDemoBtn">
+                🔄 Reset
+            </button>
+        </div>
+        <div class="demo-output" id="demoOutput">
+            <p><strong>Live .value:</strong> <code id="liveValueDisplay">Original HTML Value</code></p>
+            <p><strong>getAttribute("value"):</strong> <code id="attrValueDisplay">Original HTML Value</code></p>
+        </div>
+        <div class="demo-note">
+            <strong>💡 Key Insight:</strong>
+            <code>input.value</code> reflects the <em>current live state</em> (what the user sees/interacts with).
+            <code>input.getAttribute("value")</code> reflects the <em>initial HTML attribute</em> as written in the source code.
+            They can diverge as soon as the user types!
+        </div>
+    </section>
+
+    <!-- ==================== FEATURE 9: EVENT PROPAGATION DEMONSTRATION ==================== -->
+    <section class="card demo-section" id="eventPropDemo">
+        <h2 class="section-title">🔄 Event Propagation: Bubbling & Capturing</h2>
+        <p class="demo-description">
+            Click the innermost <strong>Child Button</strong> and observe the console logs.
+            The nested colored boxes represent the DOM hierarchy.
+        </p>
+
+        <!-- Visual nested structure -->
+        <div class="propagation-visual" id="propagationVisual">
+            <!-- Grandparent (outermost) -->
+            <div class="prop-box grandparent-box" id="grandparentBox">
+                <span class="prop-label">👴 Grandparent</span>
+                <!-- Parent -->
+                <div class="prop-box parent-box" id="parentBox">
+                    <span class="prop-label">👨 Parent</span>
+                    <!-- Child (innermost) -->
+                    <button class="prop-box child-box" id="childButton">
+                        👶 Child Button<br><small>(Click Me!)</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Console log display area -->
+        <div class="console-display" id="consoleDisplay">
+            <h3>📋 Console Log Output:</h3>
+            <div class="console-logs" id="consoleLogs">
+                <p class="console-placeholder">Click the Child Button to see event propagation order...</p>
+            </div>
+            <button class="btn btn-outline btn-sm" id="clearConsoleBtn">🗑️ Clear Console Display</button>
+        </div>
+
+        <div class="propagation-notes">
+            <div class="note-card note-bubbling">
+                <h4>🔼 Event Bubbling</h4>
+                <p>Event travels <strong>from the target element upward</strong> through ancestors.</p>
+                <p>Order: <strong>Child → Parent → Grandparent</strong></p>
+                <p><em>This is the default behavior (capture: false).</em></p>
+            </div>
+            <div class="note-card note-capturing">
+                <h4>🔽 Event Capturing</h4>
+                <p>Event travels <strong>from the outermost ancestor down</strong> to the target.</p>
+                <p>Order: <strong>Grandparent → Parent → Child</strong></p>
+                <p><em>Enabled with addEventListener(type, handler, true).</em></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FEATURE 10: BROWSER RENDERING PIPELINE SECTION ==================== -->
+    <section class="card pipeline-section" id="renderingPipeline">
+        <h2 class="section-title">🖥️ Browser Rendering Pipeline</h2>
+        <p class="demo-description">
+            Understanding how the browser converts HTML, CSS, and JavaScript into pixels on the screen.
+        </p>
+
+        <div class="pipeline-container">
+            <!-- Step 1: HTML -->
+            <div class="pipeline-card pipeline-html">
+                <div class="pipeline-icon">📄</div>
+                <h3>HTML</h3>
+                <p>Raw HTML markup received from the server or generated dynamically.</p>
+            </div>
+            <div class="pipeline-arrow">⬇️</div>
+
+            <!-- Step 2: Parsing -->
+            <div class="pipeline-card pipeline-parsing">
+                <div class="pipeline-icon">🔍</div>
+                <h3>Parsing</h3>
+                <p>The browser's HTML parser reads the raw bytes and converts them into meaningful tokens.</p>
+            </div>
+            <div class="pipeline-arrow">⬇️</div>
+
+            <!-- Step 3: Tokenization -->
+            <div class="pipeline-card pipeline-tokenization">
+                <div class="pipeline-icon">🧩</div>
+                <h3>Tokenization</h3>
+                <p>Characters are grouped into tokens: start tags, end tags, attributes, text content.</p>
+            </div>
+            <div class="pipeline-arrow">⬇️</div>
+
+            <!-- Step 4: DOM Tree -->
+            <div class="pipeline-card pipeline-dom">
+                <div class="pipeline-icon">🌳</div>
+                <h3>DOM Tree</h3>
+                <p>Tokens are assembled into a hierarchical tree structure — the Document Object Model.</p>
+            </div>
+
+            <!-- Divider -->
+            <div class="pipeline-divider">
+                <span>➕</span>
+            </div>
+
+            <!-- CSS Path -->
+            <div class="pipeline-card pipeline-css">
+                <div class="pipeline-icon">🎨</div>
+                <h3>CSS</h3>
+                <p>Stylesheets are parsed into the CSS Object Model (CSSOM Tree).</p>
+            </div>
+            <div class="pipeline-arrow">⬇️</div>
+
+            <!-- Render Tree -->
+            <div class="pipeline-card pipeline-render">
+                <div class="pipeline-icon">🎭</div>
+                <h3>Render Tree</h3>
+                <p>DOM Tree + CSSOM Tree combine to form the Render Tree — only visible elements.</p>
+            </div>
+            <div class="pipeline-arrow">⬇️</div>
+
+            <!-- Layout -->
+            <div class="pipeline-card pipeline-layout">
+                <div class="pipeline-icon">📐</div>
+                <h3>Layout (Reflow)</h3>
+                <p>Calculates exact position and size of each element on the viewport.</p>
+            </div>
+            <div class="pipeline-arrow">⬇️</div>
+
+            <!-- Paint -->
+            <div class="pipeline-card pipeline-paint">
+                <div class="pipeline-icon">🖌️</div>
+                <h3>Paint</h3>
+                <p>Fills pixels with colors, text, images, borders, shadows — rasterization.</p>
+            </div>
+            <div class="pipeline-arrow">⬇️</div>
+
+            <!-- Composite -->
+            <div class="pipeline-card pipeline-composite">
+                <div class="pipeline-icon">🖼️</div>
+                <h3>Composite</h3>
+                <p>Layers are combined and drawn to the screen in the correct order.</p>
+            </div>
+        </div>
+
+        <div class="pipeline-summary">
+            <strong>📌 Summary Flow:</strong>
+            <code>HTML → Parsing → Tokenization → DOM Tree</code> &nbsp;+&nbsp;
+            <code>CSS → CSSOM Tree</code> &nbsp;→&nbsp;
+            <code>Render Tree → Layout → Paint → Composite → Screen</code>
+        </div>
+    </section>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="app-footer">
+    <p>© 2024 Professional Task Manager | Built with ❤️ using Vanilla HTML, CSS & JavaScript</p>
+</footer>
+
+<!-- External JavaScript -->
+<script src="script.js">
+    // ============================================================
+    // All JavaScript logic is in the external script.js file.
+    // This ensures clean separation of concerns.
+    // ============================================================
+</script>
+</body>
+</html>
